@@ -19,6 +19,10 @@ Wprowadź termin tutaj.
 - [ ] Zakończone
 
 ## Pulpit Wykładowcy
+
+**Przypisana osoba:**
+Michał Sala
+
 **Opis:**  
 Wprowadź opis zadania tutaj.
 
@@ -31,6 +35,10 @@ Wprowadź termin tutaj.
 - [ ] Zakończone
 
 ## Ekran Szczegółw Zajęć
+
+**Przypisana osoba:**
+Michał Sala
+
 **Opis:**  
 Wprowadź opis zadania tutaj.
 
