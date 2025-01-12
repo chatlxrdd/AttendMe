@@ -1,6 +1,12 @@
 # Zadania
 
 ## Ekran Logowania
+
+
+**Przypisana osoba:**
+
+Alan Skraba
+
 **Opis:**  
 Wprowadź opis zadania tutaj.
 
@@ -40,7 +46,7 @@ Wprowadź termin tutaj.
 
 **Przypisana osoba:**
 
-
+Alan Skraba
 
 **Opis:**  
 Wprowadź opis zadania tutaj.
