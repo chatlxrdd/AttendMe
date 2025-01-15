@@ -87,6 +87,7 @@ Wprowadź termin tutaj.
 ## Pulpit studenta
 
 **Przypisana osoba:**
+Jakun Sencio
 
 
 
@@ -122,7 +123,7 @@ Wprowadź termin tutaj.
 ## ekran zajec (student)
 
 **Przypisana osoba:**
-
+Jakun Sencio
 
 
 **Opis:**  
