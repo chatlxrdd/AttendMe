@@ -1,0 +1,12 @@
+{
+  "name": "attendme",
+  "version": "1.0.0",
+  "description": "## Projekt to zaliczenie przedmiotu Frameworki Frontendowe",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
