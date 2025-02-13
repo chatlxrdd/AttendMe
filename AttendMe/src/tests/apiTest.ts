@@ -9,8 +9,8 @@ interface TokenResult {
 export const testLogin = async () => {
   try {
     const response = await axios.post<TokenResult>(`${API_BASE_URL}/user/login`, {
-      loginName: "stu14748",
-      password: "14748",
+      loginName: "pk",
+      password: "123#Asd",
     });
 
     if (response.data && response.data.token) {
