@@ -1,12 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import StudentDashboard from "@/views/StudentDashboard.vue";
-import CourseDetails from "@/views/CourseDetails.vue";
-import Login from "@/views/Login.vue";
+import StudentLogin from "../views/StudentLogin.vue";
+import StudentDashboard from "../views/StudentDashboard.vue";
 
 const routes = [
-  { path: "/login", name: "Login", component: Login },
-  { path: "/student", name: 'Dashboard', component: StudentDashboard },
-  { path: "/student/course/:id", name: 'Course', component: CourseDetails },
+  { path: "/", component: StudentLogin },
+  { path: "/student/dashboard", component: StudentDashboard }
 ];
 
 const router = createRouter({
