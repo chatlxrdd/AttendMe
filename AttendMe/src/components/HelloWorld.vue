@@ -4,7 +4,7 @@ defineProps({
     type: String,
     required: true,
   },
-})
+});
 </script>
 
 <template>
@@ -16,7 +16,7 @@ defineProps({
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
     </h3>
   </div>
-</template><h1>test</h1>
+</template>
 
 <style scoped>
 h1 {
