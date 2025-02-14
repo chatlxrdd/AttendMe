@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import apiClient from "@/api/backend"; // Używamy tylko apiClient!
+import apiClient from "@/api/backend";
 
 interface AuthResponse {
   token: string;
@@ -21,7 +21,7 @@ const loginData = {
   password: "123#Asd",
 };
 
-// Funkcja logowania, ale teraz używa apiClient
+// Funkcja logowania
 const loginAndGetToken = async (): Promise<string | null> => {
   try {
     const response = await apiClient.post<AuthResponse>(
@@ -49,7 +49,7 @@ const loginAndGetToken = async (): Promise<string | null> => {
 // Funkcja do pobierania zajęć wykładowcy
 const fetchClasses = async () => {
   try {
-    let token/* = localStorage.getItem("token")*/;
+    let token; // = localStorage.getItem("token")
 
     if (!token) {
       token = await loginAndGetToken();
