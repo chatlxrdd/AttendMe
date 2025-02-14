@@ -2,6 +2,7 @@
 import { onMounted } from "vue";
 import axios from "axios";
 
+/*
 const API_BASE_URL = "https://attendme-backend.runasp.net";
 
 const testLogin = async () => {
@@ -30,10 +31,10 @@ const testLogin = async () => {
   }
 };
 
-
 onMounted(async () => {
   await testLogin();
 });
+*/
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import apiClient from "@/api/backend";
+import apiClient from "@/api/backend"; // Używamy tylko apiClient!
 
 interface AuthResponse {
   token: string;
@@ -17,19 +17,43 @@ const errorMessage = ref("");
 
 // Dane logowania na sztywno
 const loginData = {
-  username: "pk",
+  loginName: "pk",
   password: "123#Asd",
 };
 
-// Automatyczne logowanie i pobieranie zajęć
+// Funkcja logowania, ale teraz używa apiClient
+const loginAndGetToken = async (): Promise<string | null> => {
+  try {
+    const response = await apiClient.post<AuthResponse>(
+      "/user/login",
+      null,
+      {
+        params: loginData,
+        headers: { "Accept": "text/plain" },
+      }
+    );
+
+    if (response.data?.token) {
+      console.log("✅ Zalogowano! Otrzymany token:", response.data.token);
+      localStorage.setItem("token", response.data.token);
+      return response.data.token;
+    } else {
+      throw new Error("Brak tokena w odpowiedzi.");
+    }
+  } catch (error) {
+    console.error("❌ Błąd logowania:", error.response?.data || error.message);
+    return null;
+  }
+};
+
+// Funkcja do pobierania zajęć wykładowcy
 const fetchClasses = async () => {
   try {
-    let token = localStorage.getItem("token");
+    let token/* = localStorage.getItem("token")*/;
 
     if (!token) {
-      const response = await apiClient.post<AuthResponse>("/api/auth/login", loginData);
-      token = response.data.token;
-      localStorage.setItem("token", token);
+      token = await loginAndGetToken();
+      if (!token) throw new Error("Nie udało się uzyskać tokena.");
     }
 
     const res = await apiClient.get<Class[]>("/api/teacher/classes");
@@ -42,7 +66,7 @@ const fetchClasses = async () => {
   }
 };
 
-// Po wejściu na stronę automatycznie logujemy wykładowcę i pobieramy zajęcia
+// Automatyczne logowanie i pobieranie zajęć po załadowaniu strony
 onMounted(fetchClasses);
 </script>
 
