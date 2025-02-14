@@ -6,12 +6,18 @@ interface AuthResponse {
   token: string;
 }
 
-interface Class {
-  id: number;
-  name: string;
+interface CourseSession {
+  courseId: number;
+  courseName: string;
+  courseGroupId: number;
+  courseGroupName: string;
+  courseSessionId: number;
+  locationName: string;
+  dateStart: string;
+  dateEnd: string;
 }
 
-const classes = ref<Class[]>([]);
+const classes = ref<CourseSession[]>([]);
 const isLoading = ref(true);
 const errorMessage = ref("");
 
@@ -56,10 +62,16 @@ const fetchClasses = async () => {
       if (!token) throw new Error("Nie udało się uzyskać tokena.");
     }
 
-    const res = await apiClient.get<Class[]>("/api/teacher/classes");
-    classes.value = res.data;
+    const res = await apiClient.get<CourseSession[]>("/course/teacher/session/get");
+
+    if (res.data) {
+      classes.value = res.data;
+      console.log("✅ Pobrano zajęcia:", res.data);
+    } else {
+      throw new Error("Brak danych w odpowiedzi.");
+    }
   } catch (error) {
-    console.error("Błąd podczas pobierania zajęć:", error);
+    console.error("❌ Błąd podczas pobierania zajęć:", error);
     errorMessage.value = "Nie udało się załadować zajęć.";
   } finally {
     isLoading.value = false;
@@ -78,8 +90,10 @@ onMounted(fetchClasses);
     <p v-if="errorMessage">{{ errorMessage }}</p>
 
     <ul v-if="!isLoading && classes.length">
-      <li v-for="cls in classes" :key="cls.id">
-        <router-link :to="'/class/' + cls.id">{{ cls.name }}</router-link>
+      <li v-for="cls in classes" :key="cls.courseSessionId">
+        <router-link :to="'/class/' + cls.courseSessionId">
+          {{ cls.courseName }} ({{ cls.dateStart }} - {{ cls.dateEnd }})
+        </router-link>
       </li>
     </ul>
 
