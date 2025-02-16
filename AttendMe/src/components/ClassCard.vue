@@ -1,19 +1,50 @@
 <script setup lang="ts">
-defineProps<{ name: string; id: number }>();
+defineProps<{
+  courseSessionId: number;
+  courseGroupName: string;
+  courseName: string;
+  locationName: string;
+  dateStart: string;
+  dateEnd: string;
+}>();
+
+// Funkcje formatowania daty i czasu
+function formatDate(dateString: string | null) {
+  if (!dateString) return "Brak daty";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("pl-PL", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).replace(/\//g, '.');
+}
+
+function formatTime(dateString: string | null) {
+  if (!dateString) return "--:--";
+  const date = new Date(dateString);
+  return date.toLocaleTimeString("pl-PL", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+}
 </script>
 
 <template>
-  <li>
-    <router-link :to="'/class/' + id">{{ name }}</router-link>
-  </li>
+  <tr @click="$router.push('/class/' + courseSessionId)">
+    <td><strong>{{ courseName || "Brak danych" }}</strong></td>
+    <td>{{ formatDate(dateStart) }}</td>
+    <td>{{ formatTime(dateStart) }} - {{ formatTime(dateEnd) }}</td>
+    <td>{{ locationName || "Brak danych" }}</td>
+    <td>{{ courseGroupName || "Brak danych" }}</td>
+  </tr>
 </template>
 
 <style scoped>
-li {
-  margin: 10px 0;
-}
-a {
-  text-decoration: none;
-  color: blue;
+td {
+  padding: 12px;
+  text-align: center;
+  color: black;
+  white-space: nowrap;
 }
 </style>
