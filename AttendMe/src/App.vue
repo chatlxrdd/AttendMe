@@ -47,7 +47,6 @@ const ifTokenValid = async() => {
       `/user/get?userId=${userId}`,
       null,
     );
-    console.log(response.data);
     return response.data;
   }
     catch (error) {
