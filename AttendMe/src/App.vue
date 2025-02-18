@@ -1,42 +1,44 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue';
-import TheWelcome from './components/TheWelcome.vue';
-import { onMounted } from "vue";
-import axios from "axios";
+<script setup lang="ts">
 
-const API_BASE_URL = "https://attendme-backend.runasp.net";
 
-const testLogin = async () => {
-  try {
-    const response = await axios.post(
-      `${API_BASE_URL}/user/login`, 
-      null,  // Brak body, parametry prześlemy w URL
-      {
-        params: {
-          loginName: "stu14748",
-          password: "14748"
-        },
-        headers: {
-          "Accept": "text/plain"
-        }
-      }
-    );
+// poprostu to zakomentuj wszystko XD
+import { onMounted, ref } from 'vue';
+import router from '@/router';
 
-    if (response.data && response.data.token) {
-      console.log("✅ Test zakończony sukcesem! Otrzymany token:", response.data.token);
-    } else {
-      console.error("❌ Test nieudany: Brak tokena w odpowiedzi.");
-    }
-  } catch (error) {
-    console.error("❌ Błąd testu API:", error.response?.data || error.message);
+const decodeJwt = (token: string): any => {
+  const payload = token.split(".")[1];
+  const decodedPayload = atob(payload);
+  return JSON.parse(decodedPayload);
+};
+const getRoleFromToken = (token: string): string => {
+  const decodedToken = decodeJwt(token);
+  return decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+};
+
+const redirectToDashboard = (role: string) => {
+  if (role === "teacher") {
+    router.push("/teacher");
+  } else if (role === "student") {
+    router.push("/student/dashboard");
+  } else {
+    console.error("❌ Nieznana rola:", role);
   }
 };
 
 
+ const ifTokenExists = () => {
+   const token = localStorage.getItem("token");
+   if (token !== null) {
+    
+    redirectToDashboard(getRoleFromToken(token));
+    console.log(`Znalezniono token, przekierowanie... `)
+   } else {
+    console.log("Brak tokena, zaloguj się.")
+    router.push("/login");
+   }
+ }
+onMounted(ifTokenExists);
 
-onMounted(async () => {
-  await testLogin();
-});
 </script>
 
 <template>
