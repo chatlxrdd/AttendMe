@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import apiClient from "@/api/backend";
+import router from '@/router';
 
 interface AuthResponse {
   token: string;
@@ -10,6 +11,8 @@ const username = ref<string>("");
 const password = ref<string>("");
 const error = ref<string>("");
 const isLogged = ref<boolean>(false);
+
+
 const handleLogin = async (): Promise<string | null> => {
   try {
     let loginData = {
