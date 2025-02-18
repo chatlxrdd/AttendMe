@@ -6,7 +6,7 @@ import Teacher from "@/views/Teacher.vue";
 
 const routes = [
   {
-    path: "/",
+    path: "/login",
     name: "Login",
     component: Login,
   },

@@ -3,9 +3,7 @@ import { onMounted, ref } from 'vue';
 import apiClient from "@/api/backend";
 import router from '@/router';
 
-interface AuthResponse {
-  token: string;
-}
+
 
 const username = ref<string>("");
 const password = ref<string>("");

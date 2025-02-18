@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import router from '@/router';
+import apiClient from './api/backend';
+interface AuthResponse {
+  token: string;
+}
 
 const decodeJwt = (token: string): any => {
   const payload = token.split(".")[1];
@@ -34,7 +38,32 @@ const redirectToDashboard = (role: string) => {
     router.push("/login");
    }
  }
-onMounted(ifTokenExists);
+
+const ifTokenValid = async() => {
+  try {
+  const userId = decodeJwt(localStorage.getItem("token")!).sub;
+  console.log(`Sprawdzanie tokena dla użytkownika o id: ${userId}`);
+  const response = await apiClient.get<AuthResponse>(
+      `/user/get?userId=${userId}`,
+      null,
+    );
+    console.log(response.data);
+    return response.data;
+  }
+    catch (error) {
+if (error.response?.status === 401) { // Ponowne logowanie
+      console.log("❌ Token wygasł lub jest niepoprawny. Zaloguj się ponownie");
+      localStorage.removeItem("token");
+      router.push("/login");
+    }
+} 
+}
+
+onMounted(ifTokenExists)
+onMounted(ifTokenValid)
+
+const time = ref<number>(60*1000)
+setInterval(ifTokenValid, time.value);
 
 </script>
 
