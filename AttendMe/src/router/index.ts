@@ -5,7 +5,7 @@ import Login from "@/views/Login.vue";
 
 const routes = [
   { path: "/login", name: "Login", component: Login },
-  { path: "/student/dashboard", name: 'Dashboard', component: StudentDashboard },
+  { path: "/student", name: 'Dashboard', component: StudentDashboard },
   { path: "/student/course/:id", name: 'Course', component: CourseDetails },
 ];
 

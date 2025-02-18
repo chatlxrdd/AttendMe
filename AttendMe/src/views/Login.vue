@@ -36,14 +36,13 @@ const handleLogin = async (): Promise<string | null> => {
     }
   } catch (error) {
     console.error("❌ Błąd logowania:", error.response?.data || error.message);
+    alert("Niepoprawne dane logowania. Spróbuj ponownie.");
     return null;
+  } finally {
+    location.reload();
   }
 };
-
-// stworzyć sprazwdzanie czy logowanie jest przez studenta czy wykladowce
-// jesli student to przekierowac na strone studenta
-// jesli wykladowca to przekierowac na strone wykladowcy
-// navbar z przyciskiem wyloguj i informacja o studencia
+// navbar
 </script>
 
 <template>
@@ -75,7 +74,7 @@ const handleLogin = async (): Promise<string | null> => {
       <div v-if="error" class="error-message">
         {{ error }}
       </div>
-      <button type="submit">Zaloguj</button>
+      <button type="submit" >Zaloguj</button>
     </form>
 
     <!-- Panel wykładowcy wyświetlany po poprawnym logowaniu -->
