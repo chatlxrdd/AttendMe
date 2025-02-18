@@ -44,7 +44,6 @@ function formatTime(dateString: string | null) {
 td {
   padding: 12px;
   text-align: center;
-  color: black;
   white-space: nowrap;
 }
 </style>
