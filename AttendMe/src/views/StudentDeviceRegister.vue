@@ -1,32 +1,29 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import apiClient from "@/api/backend"; // 🔹 Import klienta API
+import apiClient from "@/api/backend";
+import "@/assets/register.css"; // 🔹 Importujemy zewnętrzny plik CSS
 
-// 🔹 Definiowanie zmiennych reaktywnych dla formularza
+// 🔹 Zmienne formularza
 const deviceName = ref("");
 const studentName = ref("");
 const studentSurname = ref("");
 const albumNumber = ref("");
 const message = ref("");
 const messageType = ref("success");
-const valid = ref<boolean>(false); // ✅ Typowanie poprawione
-const form = ref<any>(null); // ✅ Ref formularza
 
-// 🔹 Reguły walidacji dla pól
-const required = (value: string) => !!value || "Pole jest wymagane";
-const numberRule = (value: string) => /^\d+$/.test(value) || "Numer albumu musi być liczbą";
-
-// 🔹 Funkcja rejestracji urządzenia zgodnie z API Swagger
-const registerDevice = async () => {
-    if (!form.value) return; // ✅ Upewnienie się, że form istnieje
-
-    const { valid: isValid } = await form.value.validate(); // ✅ Pobranie statusu walidacji
-
-    if (!isValid) {
+// 🔹 Funkcja walidacji formularza
+const validateForm = () => {
+    if (!deviceName.value || !studentName.value || !studentSurname.value || !albumNumber.value) {
         message.value = "❌ Wszystkie pola są wymagane!";
         messageType.value = "error";
-        return;
+        return false;
     }
+    return true;
+};
+
+// 🔹 Funkcja rejestracji urządzenia
+const registerDevice = async () => {
+    if (!validateForm()) return;
 
     try {
         const response = await apiClient.post<{ token: string }>(
@@ -35,22 +32,24 @@ const registerDevice = async () => {
                 deviceName: deviceName.value,
                 studentName: studentName.value,
                 studentSurname: studentSurname.value,
-                albumNumber: Number(albumNumber.value), // Konwersja na liczbę
+                albumNumber: Number(albumNumber.value),
             },
             {
-                headers: { "Accept": "text/plain" }, // 🔹 Oczekujemy odpowiedzi jako tekst
+                headers: { "Accept": "text/plain" },
             }
         );
 
         if (response.data?.token) {
-            localStorage.setItem("deviceToken", response.data.token); // ✅ Zapisujemy token w LocalStorage
+            localStorage.setItem("deviceToken", response.data.token);
             message.value = "✅ Urządzenie zarejestrowane pomyślnie!";
             messageType.value = "success";
             console.log("🔹 Otrzymany token:", response.data.token);
 
-            // ✅ Resetowanie formularza po rejestracji
-            form.value.reset();
-            form.value.resetValidation();
+            // Reset formularza
+            deviceName.value = "";
+            studentName.value = "";
+            studentSurname.value = "";
+            albumNumber.value = "";
         } else {
             throw new Error("Brak tokena w odpowiedzi.");
         }
@@ -60,7 +59,7 @@ const registerDevice = async () => {
         messageType.value = "error";
     }
 
-    // 🔹 Czyszczenie komunikatu po 3 sekundach
+    // 🔹 Komunikat znika po 3 sekundach
     setTimeout(() => {
         message.value = "";
     }, 3000);
@@ -68,54 +67,36 @@ const registerDevice = async () => {
 </script>
 
 <template>
-    <v-container class="d-flex justify-center">
-        <v-card class="pa-5" max-width="500" elevation="5">
-            <v-card-title class="text-h4 text-center font-weight-bold">
-                Rejestracja urządzenia
-            </v-card-title>
-            <v-card-subtitle class="text-center">
-                Rejestrujesz urządzenie, którego będziesz używać do sprawdzania obecności. Uzupełnij poniższe dane i
-                naciśnij przycisk "Rejestruj".
-            </v-card-subtitle>
+    <div class="container">
 
-            <v-card-text>
-                <v-form ref="form" v-model="valid">
-                    <v-text-field v-model="deviceName" label="📱 Nazwa urządzenia" outlined required :rules="[required]"
-                        density="comfortable"></v-text-field>
 
-                    <v-text-field v-model="studentName" label="🧑 Twoje imię" outlined required :rules="[required]"
-                        density="comfortable"></v-text-field>
+        <h1 class="title">Rejestracja urządzenia</h1>
+        <p class="subtitle">
+            Rejestrujesz urządzenie, którego będziesz używać do sprawdzania obecności. Uzupełnij poniższe dane
+            i naciśnij przycisk "Rejestruj".
+        </p>
 
-                    <v-text-field v-model="studentSurname" label="👨‍🎓 Twoje nazwisko" outlined required
-                        :rules="[required]" density="comfortable"></v-text-field>
+        <form @submit.prevent="registerDevice" class="form">
+            <label class="input-label">Nazwa urządzenia</label>
+            <input v-model="deviceName" type="text" placeholder="Wprowadź nazwę urządzenia" class="input-field"
+                required />
 
-                    <v-text-field v-model="albumNumber" label="🎓 Twój numer albumu" outlined required type="number"
-                        :rules="[required, numberRule]" density="comfortable"></v-text-field>
-                </v-form>
-            </v-card-text>
+            <label class="input-label">Twoje imię</label>
+            <input v-model="studentName" type="text" placeholder="Wprowadź swoje imię" class="input-field" required />
 
-            <v-card-actions class="justify-center">
-                <v-btn color="green darken-2" large @click="registerDevice" :disabled="!valid">
-                    ✅ Zarejestruj
-                </v-btn>
-            </v-card-actions>
+            <label class="input-label">Twoje nazwisko</label>
+            <input v-model="studentSurname" type="text" placeholder="Wprowadź swoje nazwisko" class="input-field"
+                required />
 
-            <v-alert v-if="message" :type="messageType" class="mt-3 text-center">
-                {{ message }}
-            </v-alert>
-        </v-card>
-    </v-container>
+            <label class="input-label">Twój numer albumu</label>
+            <input v-model="albumNumber" type="number" placeholder="Wprowadź numer albumu" class="input-field"
+                required />
+
+            <button type="submit" class="submit-btn">Zarejestruj</button>
+        </form>
+
+        <div v-if="message" :class="['message', messageType === 'success' ? 'success' : 'error']">
+            {{ message }}
+        </div>
+    </div>
 </template>
-
-<style scoped>
-.v-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-}
-
-.v-card {
-    width: 100%;
-    max-width: 500px;
-}
-</style>
