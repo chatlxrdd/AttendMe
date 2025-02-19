@@ -31,7 +31,7 @@ function formatTime(dateString: string | null) {
 </script>
 
 <template>
-  <tr @click="$router.push('/class/' + courseSessionId)">
+  <tr @click="$router.push('/session/' + courseSessionId)">
     <td><strong>{{ courseName || "Brak danych" }}</strong></td>
     <td>{{ formatDate(dateStart) }}</td>
     <td>{{ formatTime(dateStart) }} - {{ formatTime(dateEnd) }}</td>

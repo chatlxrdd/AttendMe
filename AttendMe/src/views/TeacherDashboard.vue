@@ -3,10 +3,6 @@ import { ref, onMounted } from "vue";
 import apiClient from "@/api/backend";
 import ClassCard from "@/components/ClassCard.vue";
 
-interface AuthResponse {
-  token: string;
-}
-
 interface CourseSession {
   courseId: number;
   courseName: string;
@@ -53,49 +49,11 @@ const getDateRanges = () => {
   };
 };
 
-// Dane logowania na sztywno
-const loginData = {
-  loginName: "pk",
-  password: "123#Asd",
-};
-
-// Funkcja logowania
-const loginAndGetToken = async (): Promise<string | null> => {
-  try {
-    const response = await apiClient.post<AuthResponse>(
-      "/user/login",
-      null,
-      {
-        params: loginData,
-        headers: { "Accept": "text/plain" },
-      }
-    );
-
-    if (response.data?.token) {
-      console.log("✅ Zalogowano! Otrzymany token:", response.data.token);
-      localStorage.setItem("token", response.data.token);
-      return response.data.token;
-    } else {
-      throw new Error("Brak tokena w odpowiedzi.");
-    }
-  } catch (error) {
-    console.error("❌ Błąd logowania:", error.response?.data || error.message);
-    return null;
-  }
-};
-
 // Funkcja do pobierania zajęć wykładowcy
 const fetchClasses = async () => {
   try {
     isLoading.value = true;
     errorMessage.value = "";
-
-    let token = localStorage.getItem("token");
-
-    if (!token) {
-      token = await loginAndGetToken();
-      if (!token) throw new Error("Nie udało się uzyskać tokena.");
-    }
 
     const dateRanges = getDateRanges();
     const selectedFilter = dateRanges[filterType.value]; // Pobieramy odpowiedni zakres dat
@@ -107,8 +65,6 @@ const fetchClasses = async () => {
         dateEnd: selectedFilter.dateEnd,
       },
       sortBy: "dateStart"
-    }, {
-      headers: { "Accept": "text/plain" },
     });
 
     if (res.data && Array.isArray(res.data.items)) {
@@ -116,18 +72,7 @@ const fetchClasses = async () => {
     } else {
       throw new Error("Brak danych w odpowiedzi.");
     }
-  } catch (error) {
-    if (error.response?.status === 401) { // Ponowne logowanie
-      console.warn("❌ Token wygasł lub jest niepoprawny. Logowanie ponowne...");
-      localStorage.removeItem("token");
-      await loginAndGetToken();
-      fetchClasses();
-    } else {
-      console.error("❌ Błąd podczas pobierania zajęć:", error);
-      errorMessage.value = "Nie udało się załadować zajęć.";
-      classes.value = [];
-    }
-  } finally {
+  }  finally {
     isLoading.value = false;
   }
 };
@@ -137,7 +82,7 @@ const changeFilter = () => {
   fetchClasses();
 };
 
-// 🔹 Automatyczne logowanie i pobieranie zajęć po załadowaniu strony
+// Pobieranie zajęć po załadowaniu strony
 onMounted(fetchClasses);
 </script>
 
