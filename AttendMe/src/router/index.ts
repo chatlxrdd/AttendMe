@@ -21,7 +21,7 @@ const routes = [
     component: SessionDetails,
   },
   {
-    path: "/scanner/:tokenId",
+    path: "/scanner/:tokenScanner",
     name: "Scanner",
     component: Scanner,
   }

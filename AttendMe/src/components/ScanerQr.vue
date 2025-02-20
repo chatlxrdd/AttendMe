@@ -19,7 +19,7 @@ const fetchScannerToken = async () => {
         );
 
         if (response.data?.token) {
-            scannerUrl.value = `/scanner/${response.data.token}`;
+            scannerUrl.value = `${window.location.origin}/scanner/${response.data.token}`;
         } else {
             throw new Error("Brak tokena skanera w odpowiedzi.");
         }
