@@ -70,7 +70,7 @@ Wprowadź termin tutaj.
 ## Autoryzacja kodu
 
 **Przypisana osoba:**
-
+Michał Rokosz
 
 
 **Opis:**  
@@ -105,7 +105,7 @@ Wprowadź termin tutaj.
 ## Ekran generowania kodu
 
 **Przypisana osoba:**
-
+Michał Rokosz
 
 
 **Opis:**  
