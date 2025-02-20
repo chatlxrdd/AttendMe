@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import { formatDate, formatTime } from '@/utils/utilScripts.vue';
 import apiClient from "@/api/backend";
 import Scanner from "@/components/ScanerQr.vue";
+import DevicesStudents from "@/components/DevicesStudents.vue";
 import "@/assets/scannerQr.css";
 
 interface SessionDetails {
@@ -107,6 +108,7 @@ onMounted(async () => {
       <p><strong>Godzina:</strong> {{ formatTime(sessionDetails.dateStart) }} - {{ formatTime(sessionDetails.dateEnd) }}</p>
       <p><strong>Sala:</strong> {{ sessionDetails.locationName }}</p>
       <Scanner :courseSessionId="Number(sessionId)" />
+      <DevicesStudents :students="students" />
     </div>
 
     <h2>Lista studentów</h2>

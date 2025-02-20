@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, defineProps, onMounted } from "vue";
 import QrcodeVue from "qrcode.vue";
 import apiClient from "@/api/backend";
 //import "@/assets/scanner.css"; // 🔹 Import pliku ze stylami
