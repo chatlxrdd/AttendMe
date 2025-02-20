@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { formatDate, formatTime } from '@/utils/FormatDate.vue';
+import { formatDate, formatTime } from '@/utils/utilScripts.vue';
 import apiClient from "@/api/backend";
-import Scanner from "@/components/Scanner.vue";
+import Scanner from "@/components/ScanerQr.vue";
 
 interface SessionDetails {
   courseId: number;
@@ -141,93 +141,3 @@ onMounted(async () => {
     <p v-else>Brak studentów na liście.</p>
   </div>
 </template>
-
-<style scoped>
-.session-details {
-  padding: 40px 20px;
-  max-width: 800px;
-  margin: auto;
-  text-align: center;
-  background-color: #181818;
-  color: #ffffff;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-h1, h2 {
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-
-.session-info {
-  background: #222;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  width: 100%;
-  text-align: left;
-  margin-bottom: 20px;
-}
-
-p {
-  font-size: 1.1rem;
-  margin: 8px 0;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #222;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-th, td {
-  padding: 12px;
-  text-align: center;
-}
-
-th {
-  background: #007BFF;
-  color: white;
-  font-weight: bold;
-}
-
-tbody tr:nth-child(even) {
-  background: #2a2a2a;
-}
-
-tbody tr:hover {
-  background: #007BFF;
-  cursor: pointer;
-  transition: background 0.3s ease-in-out;
-}
-
-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-
-button:hover {
-  background: #007BFF;
-  color: white;
-}
-
-.present {
-  color: #28a745;
-  font-weight: bold;
-}
-
-.absent {
-  color: #dc3545;
-  font-weight: bold;
-}
-</style>

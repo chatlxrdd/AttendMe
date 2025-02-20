@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import apiClient, { AuthResponse } from '@/api/backend';
 import router from '@/router';
-import { decodeJwt } from '@/utils/DecodeJwt.vue';
+import { decodeJwt } from '@/utils/utilScripts.vue';
 
 const username = ref<string>("");
 const password = ref<string>("");
@@ -90,54 +90,3 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
-.login-container {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-input {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-}
-
-button {
-  padding: 10px 15px;
-  background-color: #428bca;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-button:hover {
-  background-color: #3071a9;
-}
-
-.error-message {
-  color: red;
-  margin-bottom: 10px;
-}
-
-.dashboard {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f7f7f7;
-  border-radius: 4px;
-}
-</style>
