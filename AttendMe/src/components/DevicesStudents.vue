@@ -83,8 +83,7 @@ const resetDevice = async (userId: number) => {
     await apiClient.post("/user/device/reset", null, { 
       params: { deviceUserId: userId } 
     });
-    alert("Urządzenie zostało zresetowane!");
-    fetchUsersDevices(); // Odświeżamy tabelę po resecie
+    fetchUsersDevices();
   } catch (error) {
     console.error("❌ Błąd resetowania urządzenia:", error);
     alert("Nie udało się zresetować urządzenia.");
