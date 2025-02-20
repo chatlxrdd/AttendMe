@@ -1,10 +1,30 @@
 import { createRouter, createWebHistory } from "vue-router";
-import StudentLogin from "../views/StudentLogin.vue";
-import StudentDashboard from "../views/StudentDashboard.vue";
+import Login from "@/views/Login.vue";
+import TeacherDashboard from "@/views/TeacherDashboard.vue";
+import SessionDetails from "@/views/SessionDetails.vue";
+import Scanner from "@/views/Scanner.vue";
 
 const routes = [
-  { path: "/", component: StudentLogin },
-  { path: "/student/dashboard", component: StudentDashboard }
+  {
+    path: "/",
+    name: "Login",
+    component: Login,
+  },
+  {
+    path: "/teacher",
+    name: "TeacherDashboard",
+    component: TeacherDashboard,
+  },
+  {
+    path: "/session/:sessionId",
+    name: "SessionDetails",
+    component: SessionDetails,
+  },
+  {
+    path: "/scanner/:tokenScanner",
+    name: "Scanner",
+    component: Scanner,
+  }
 ];
 
 const router = createRouter({
