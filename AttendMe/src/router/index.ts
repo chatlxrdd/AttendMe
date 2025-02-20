@@ -4,6 +4,8 @@ import TeacherDashboard from "@/views/TeacherDashboard.vue";
 import TeacherSessionDetails from "@/views/TeacherSessionDetails.vue";
 import Scanner from "@/views/Scanner.vue";
 import RegisterDevice from "@/views/StudentRegisterDevice.vue"
+import StudentSessionDetails from "@/views/StudentSessionDetails.vue";
+import StudentDashboard from "@/views/StudentDashboard.vue";
 
 const routes = [
   {
@@ -30,6 +32,16 @@ const routes = [
     path: "/register/device/:tokenRegister",
     name: "Zarejestruj urządzenie",
     component: RegisterDevice,
+  },
+  {
+    path: "/student",
+    name: "StudentDashboard",
+    component: StudentDashboard,
+  },
+  {
+    path: "/student/session/:sessionId",
+    name: "StudentSessionDetails",
+    component: StudentSessionDetails,
   }
 ];
 
