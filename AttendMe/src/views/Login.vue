@@ -1,17 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import apiClient from "@/api/backend";
+import apiClient, { AuthResponse } from '@/api/backend';
 import router from '@/router';
 import { decodeJwt } from '@/utils/DecodeJwt.vue';
-
-interface AuthResponse {
-  token: string;
-}
 
 const username = ref<string>("");
 const password = ref<string>("");
 const error = ref<string>("");
-
 
 const redirectToDashboard = (token: string) => {
   const decodedToken = decodeJwt(token);

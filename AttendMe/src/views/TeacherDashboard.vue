@@ -72,7 +72,9 @@ const fetchClasses = async () => {
     } else {
       throw new Error("Brak danych w odpowiedzi.");
     }
-  }  finally {
+  } catch (error) {
+    console.error("❌ Błąd pobierania zajęć:", error);
+  } finally {
     isLoading.value = false;
   }
 };
@@ -90,7 +92,7 @@ onMounted(fetchClasses);
   <div class="dashboard">
     <h1>Pulpit wykładowcy</h1>
 
-    <!-- 🔹 Select do wyboru filtrowania zajęć -->
+    <!--  Select do wyboru filtrowania zajęć -->
     <label for="filter">Pokaż:</label>
     <select id="filter" v-model="filterType" @change="changeFilter">
       <option value="week">Ten Tydzień</option>

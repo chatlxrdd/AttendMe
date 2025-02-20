@@ -4,7 +4,6 @@ import QrcodeVue from "qrcode.vue";
 import apiClient from "@/api/backend";
 //import "@/assets/scanner.css"; // 🔹 Import pliku ze stylami
 
-
 const baseUrl = "https://attendme-backend.runasp.net";
 const props = defineProps<{ courseSessionId: number }>();
 const dialog = ref(false);

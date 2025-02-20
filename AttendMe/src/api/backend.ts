@@ -3,6 +3,10 @@ import { tokenValid } from '@/utils/TestToken.vue';
 
 const API_BASE_URL = "https://attendme-backend.runasp.net";
 
+export interface AuthResponse {
+  token: string;
+};
+
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -13,12 +17,14 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use((config) => {
   // Jeśli nie przekażemy tokena to użyje z localStorage
   if (!config.headers.Authorization) {
+    tokenValid();
     const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
+},
+(error) => {
+  return Promise.reject(error);
 });
 
 export default apiClient;
