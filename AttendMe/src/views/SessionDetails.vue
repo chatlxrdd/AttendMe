@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { ref, onMounted, watch } from "vue";
 import { formatDate, formatTime } from '@/utils/utilScripts.vue';
-import apiClient from "@/api/backend";
-import Scanner from "@/components/ScanerQr.vue";
-import "@/assets/scannerQr.css";
+import apiClient from "../api/backend";
+import { useRoute, useRouter } from 'vue-router';
 
-interface SessionDetails {
+interface CourseSessionListItem {
   courseId: number;
   courseName: string;
   courseGroupId: number;
@@ -17,128 +15,111 @@ interface SessionDetails {
   dateEnd: string;
 }
 
-interface Student {
-  attenderUserId: number;
-  userName: string;
-  userSurname: string;
-  studentAlbumIdNumber: number;
-  wasUserPresent: boolean;
+interface ApiResponse {
+  items: CourseSessionListItem[];
+  totalCount: number;
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
 }
 
 const route = useRoute();
-const sessionId = ref(route.params.sessionId as string);
-const sessionDetails = ref<SessionDetails | null>(null);
-const students = ref<Student[]>([]);
+const router = useRouter();
+const sessionDetail = ref<CourseSessionListItem | null>(null);
 const isLoading = ref(true);
 const errorMessage = ref("");
 
-// 🔹 Pobieranie szczegółów zajęć
 const fetchSessionDetails = async () => {
   try {
-    const res = await apiClient.get<SessionDetails>("/course/teacher/session/get", {
-      params: { sessionId: sessionId.value }
-    });
+    isLoading.value = true;
+    errorMessage.value = "";
 
-    if (res.data) {
-      sessionDetails.value = res.data;
-    } else {
-      throw new Error("Brak danych o sesji.");
+    const sessionId = route.params.sessionId ? Number(route.params.sessionId) : null;
+    if (!sessionId || isNaN(sessionId)) {
+      errorMessage.value = "Niepoprawne ID sesji.";
+      return;
     }
-  } catch (error) {
-    console.error("❌ Błąd pobierania szczegółów zajęć:", error);
-    errorMessage.value = "Nie udało się pobrać szczegółów zajęć.";
-  }
-};
 
-// 🔹 Pobieranie listy studentów
-const fetchStudentList = async () => {
-  try {
-    const res = await apiClient.get<Student[]>("/course/session/attendance-list/get", {
-      params: { sessionId: sessionId.value }
-    });
-
-    if (res.data) {
-      students.value = res.data;
-    } else {
-      throw new Error("Brak listy studentów.");
-    }
-  } catch (error) {
-    console.error("❌ Błąd pobierania listy studentów:", error);
-    errorMessage.value = "Nie udało się pobrać listy studentów.";
-  }
-};
-
-// 🔹 Zmiana obecności studenta
-const toggleAttendance = async (student: Student) => {
-  try {
-    await apiClient.get("/course/session/attendance/toggle", {
-      params: {
-        attendingUserId: student.attenderUserId,
-        courseSessionId: sessionId.value,
-        addOrRemove: !student.wasUserPresent
+    const response = await apiClient.post<ApiResponse>(
+      "/course/student/sessions/get",
+      {
+        pageNumber: 1,
+        pageSize: 10,
+        filters: { courseSessionId: sessionId },
+        sortBy: "dateStart"
       }
-    });
-
-    await fetchStudentList();
+    );
+    
+    if (response.data.items.length > 0) {
+      sessionDetail.value = response.data.items[0];
+    } else {
+      errorMessage.value = "Brak zajęć dla tej sesji.";
+    }
   } catch (error) {
-    console.error("❌ Błąd zmiany obecności:", error);
+    errorMessage.value = "Nie udało się załadować szczegółów zajęć.";
+  } finally {
+    isLoading.value = false;
   }
 };
 
-// 🔹 Pobieranie danych po załadowaniu widoku
-onMounted(async () => {
-  isLoading.value = true;
-  await fetchSessionDetails();
-  await fetchStudentList();
-  isLoading.value = false;
-});
+const registerAttendance = async () => {
+  try {
+    if (!sessionDetail.value) return;
+    await apiClient.post("/course/session/attendance/register", { courseSessionId: sessionDetail.value.courseSessionId });
+    fetchSessionDetails();
+  } catch (error) {
+    errorMessage.value = "Nie udało się zarejestrować obecności.";
+  }
+};
+
+const goBack = () => {
+  router.push("/student");
+};
+
+watch(() => route.params.sessionId, fetchSessionDetails);
+
+onMounted(fetchSessionDetails);
 </script>
 
 <template>
   <div class="session-details">
-    <h1>Szczegóły zajęć</h1>
-
-    <p v-if="isLoading">Ładowanie danych...</p>
-
-    <div v-if="!isLoading && sessionDetails" class="session-info">
-      <h2>{{ sessionDetails.courseName }}</h2>
-      <p><strong>Grupa:</strong> {{ sessionDetails.courseGroupName }}</p>
-      <p><strong>Data:</strong> {{ formatDate(sessionDetails.dateStart) }}</p>
-      <p><strong>Godzina:</strong> {{ formatTime(sessionDetails.dateStart) }} - {{ formatTime(sessionDetails.dateEnd) }}</p>
-      <p><strong>Sala:</strong> {{ sessionDetails.locationName }}</p>
-      <Scanner :courseSessionId="Number(sessionId)" />
-    </div>
-
-    <h2>Lista studentów</h2>
-    <table v-if="!isLoading && students.length">
-        <thead>
-        <tr>
-          <th>Album</th>
-          <th>Imię</th>
-          <th>Nazwisko</th>
-          <th>Status</th>
-          <th>Akcja</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="stu in students" :key="stu.attenderUserId">
-          <td>{{ stu.studentAlbumIdNumber }}</td>
-          <td>{{ stu.userName }}</td>
-          <td>{{ stu.userSurname }}</td>
-          <td :class="{ present: stu.wasUserPresent, absent: !stu.wasUserPresent }">
-            {{ stu.wasUserPresent ? "Obecny" : "Nieobecny" }}
-          </td>
-          <td>
-            <button @click="toggleAttendance(stu)">
-              {{ stu.wasUserPresent ? "Oznacz jako nieobecny" : "Oznacz jako obecny" }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <h1>Szczegóły Zajęć</h1>
     
+    <p v-if="isLoading">Ładowanie...</p>
     <p v-if="errorMessage">{{ errorMessage }}</p>
 
-    <p v-else>Brak studentów na liście.</p>
+    <div v-if="sessionDetail">
+      <h2>{{ sessionDetail.courseName }}</h2>
+      <p>Grupa: {{ sessionDetail.courseGroupName }}</p>
+      <p>Termin: {{ formatDate(sessionDetail.dateStart) }} {{ formatTime(sessionDetail.dateStart) }} - {{ formatTime(sessionDetail.dateEnd) }}</p>
+      <p>Lokalizacja: {{ sessionDetail.locationName }}</p>
+      
+      <button @click="registerAttendance">Rejestruj obecność</button>
+      <button @click="fetchSessionDetails">Odśwież</button>
+      <button @click="goBack">Powrót</button>
+    </div>
   </div>
 </template>
+
+
+<style scoped>
+.session-details {
+  max-width: 800px;
+  margin: auto;
+  text-align: center;
+  padding: 20px;
+  background: #f0f4f8;
+  border-radius: 10px;
+  color: black;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+</style>
