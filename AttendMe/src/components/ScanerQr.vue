@@ -4,7 +4,7 @@ import QrcodeVue from "qrcode.vue";
 import apiClient from "@/api/backend";
 //import "@/assets/scanner.css"; // 🔹 Import pliku ze stylami
 
-const baseUrl = "https://attendme-backend.runasp.net";
+
 const props = defineProps<{ courseSessionId: number }>();
 const dialog = ref(false);
 const scannerUrl = ref<string>("");
@@ -19,7 +19,7 @@ const fetchScannerToken = async () => {
         );
 
         if (response.data?.token) {
-            scannerUrl.value = `${baseUrl}/scanner/scannerToken?=${response.data.token}`;
+            scannerUrl.value = `/scanner/${response.data.token}`;
         } else {
             throw new Error("Brak tokena skanera w odpowiedzi.");
         }

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "@/views/Login.vue";
 import TeacherDashboard from "@/views/TeacherDashboard.vue";
 import SessionDetails from "@/views/SessionDetails.vue";
+import Scanner from "@/views/Scanner.vue";
 
 const routes = [
   {
@@ -19,6 +20,11 @@ const routes = [
     name: "SessionDetails",
     component: SessionDetails,
   },
+  {
+    path: "/scanner/:tokenId",
+    name: "Scanner",
+    component: Scanner,
+  }
 ];
 
 const router = createRouter({

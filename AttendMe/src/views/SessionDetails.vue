@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import { formatDate, formatTime } from '@/utils/utilScripts.vue';
 import apiClient from "@/api/backend";
 import Scanner from "@/components/ScanerQr.vue";
+import "@/assets/scannerQr.css";
 
 interface SessionDetails {
   courseId: number;
