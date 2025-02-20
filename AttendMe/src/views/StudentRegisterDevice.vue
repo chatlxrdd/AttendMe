@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import apiClient from "@/api/backend";
-import { decodeJwt } from "@/utils/utilScripts.vue";
-import router from "@/router";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const tokenRegister = ref(route.params.tokenRegister as string);
+
+console.log(tokenRegister.value)
 
 // 🔹 Zmienne formularza
 const deviceName = ref("");
@@ -14,14 +18,7 @@ const messageType = ref("success");
 
 
 // Pobranie tokenu i sprawdzenie czy jest użytkownikiem
-const checkTokenIfTeacher = (token: string) => {
-    const decodedToken = decodeJwt(token);
-    const role = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
-    if (role === "teacher") {
-        const tokenTeacher = localStorage.getItem("token");
-    }
-}
 
 // 🔹 Funkcja rejestracji urządzenia
 const registerDevice = async () => {
@@ -32,35 +29,23 @@ const registerDevice = async () => {
                 deviceName: deviceName.value,
                 studentName: studentName.value,
                 studentSurname: studentSurname.value,
-                albumNumber: Number(albumNumber.value),
+                albumIdNumber: Number(albumNumber.value),
             },
             {
                 headers: 
                 { 
                     "Accept": "text/plain",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    "Authorization": `Bearer ${tokenRegister.value}`
                 },
             }
         );
+        return response.data;
 
-        if (response.data?.token) {
-            localStorage.setItem("deviceToken", response.data.token);
-            message.value = "✅ Urządzenie zarejestrowane pomyślnie!";
-            messageType.value = "success";
-            console.log("🔹 Otrzymany token:", response.data.token);
-        } else {
-            throw new Error("Brak tokena w odpowiedzi.");
-        }
     } catch (error: any) {
         console.error("❌ Błąd rejestracji:", error.response?.data || error.message);
-        message.value = error.response?.data?.details || "⚠️ Błąd rejestracji urządzenia";
-        messageType.value = "error";
+    } finally {
+        console.log('Chuj')
     }
-
-    // 🔹 Komunikat znika po 3 sekundach
-    setTimeout(() => {
-        message.value = "";
-    }, 3000);
 };
 </script>
 

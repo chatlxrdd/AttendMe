@@ -68,7 +68,7 @@ const fetchUsersDevices = async () => {
 const copyRegisterLink = async (userId: number) => {
   if (!registrationTokens.value[userId]) return;
 
-  const registerUrl = `${window.location.origin}/registerdevice/${registrationTokens.value[userId]}`;
+  const registerUrl = `${window.location.origin}/register/device/${registrationTokens.value[userId]}`;
   try {
     await navigator.clipboard.writeText(registerUrl);
   } catch (err) {

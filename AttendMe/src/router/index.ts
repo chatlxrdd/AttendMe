@@ -27,7 +27,7 @@ const routes = [
     component: Scanner,
   },
   {
-    path: "/register/device",
+    path: "/register/device/:tokenRegister",
     name: "Zarejestruj urządzenie",
     component: RegisterDevice,
   }
