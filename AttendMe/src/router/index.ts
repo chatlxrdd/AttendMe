@@ -6,6 +6,7 @@ import Scanner from "@/views/Scanner.vue";
 import RegisterDevice from "@/views/StudentRegisterDevice.vue"
 import StudentSessionDetails from "@/views/StudentSessionDetails.vue";
 import StudentDashboard from "@/views/StudentDashboard.vue";
+import RegisterStudentQr from "@/views/RegisterStudentQr.vue";
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: "/student/session/:sessionId",
     name: "StudentSessionDetails",
     component: StudentSessionDetails,
+  },
+  {
+    path: "/student/qr/",
+    name: "Zarejestruj studenta",
+    component: RegisterStudentQr,
   }
 ];
 

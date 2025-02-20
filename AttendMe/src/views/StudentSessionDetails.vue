@@ -62,16 +62,6 @@ const fetchSessionDetails = async () => {
   }
 };
 
-const registerAttendance = async () => {
-  try {
-    if (!sessionDetail.value) return;
-    await apiClient.post("/course/session/attendance/register", { courseSessionId: sessionDetail.value.courseSessionId });
-    fetchSessionDetails();
-  } catch (error) {
-    errorMessage.value = "Nie udało się zarejestrować obecności.";
-  }
-};
-
 const goBack = () => {
   router.push("/student");
 };
@@ -93,8 +83,6 @@ onMounted(fetchSessionDetails);
       <p>Grupa: {{ sessionDetail.courseGroupName }}</p>
       <p>Termin: {{ formatDate(sessionDetail.dateStart) }} {{ formatTime(sessionDetail.dateStart) }} - {{ formatTime(sessionDetail.dateEnd) }}</p>
       <p>Lokalizacja: {{ sessionDetail.locationName }}</p>
-      
-      <button @click="registerAttendance">Rejestruj obecność</button>
       <button @click="goBack">Powrót</button>
     </div>
   </div>

@@ -39,7 +39,9 @@ const registerDevice = async () => {
                 },
             }
         );
+        localStorage.setItem("authDevice", response.data.token);
         return response.data;
+
 
     } catch (error: any) {
         console.error("❌ Błąd rejestracji:", error.response?.data || error.message);

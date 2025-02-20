@@ -99,6 +99,9 @@ const filteredSessions = computed(() =>
 const goToSessionDetails = (courseSessionId: number) => {
   router.push(`/student/session/${courseSessionId}`);
 };
+const registerAttendance = async () => {
+  router.push(`/student/qr`);
+};
 
 onMounted(fetchStudentSessions);
 </script>
@@ -106,6 +109,9 @@ onMounted(fetchStudentSessions);
 <template>
   <div class="dashboard">
     <h1>Pulpit Studenta</h1>
+    <div class="huj">
+      <button @click="registerAttendance">Rejestruj obecność</button>
+    </div>
 
     <div class="filters">
       <input v-model="searchText" type="text" placeholder="Szukaj zajęć..." @input="fetchStudentSessions" />
@@ -116,6 +122,7 @@ onMounted(fetchStudentSessions);
         <option value="all">Wszystko</option>
       </select>
     </div>
+ 
 
     <p v-if="isLoading">Ładowanie zajęć...</p>
     <p v-if="errorMessage">{{ errorMessage }}</p>

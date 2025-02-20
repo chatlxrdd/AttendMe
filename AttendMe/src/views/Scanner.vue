@@ -39,12 +39,10 @@ const startScanner = () => {
 // 🔹 Rejestracja obecności na podstawie zeskanowanego QR
 const registerAttendance = async (qrToken: string) => {
     try {
-        const response = await apiClient.post(
-            "/course/session/attendance/register",
-            { token: qrToken },
-            {
+        const response = await apiClient.get(
+            "/course/session/attendance/register",{ 
+                params: { attenderToken: qrToken },
                 headers: {
-                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${tokenScanner.value}`,
                 },
             }

@@ -6,6 +6,7 @@ import apiClient from "@/api/backend";
 import Scanner from "@/components/ScanerQr.vue";
 import DevicesStudents from "@/components/DevicesStudents.vue";
 import "@/assets/scannerQr.css";
+import "@/assets/main.css"
 
 interface SessionDetails {
   courseId: number;
