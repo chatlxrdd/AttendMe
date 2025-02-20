@@ -32,7 +32,6 @@ const handleLogin = async () => {
       null,
       {
         params: loginData,
-        headers: { "Accept": "text/plain" },
       }
     );
 
