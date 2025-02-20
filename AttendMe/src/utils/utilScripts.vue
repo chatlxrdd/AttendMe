@@ -7,6 +7,7 @@ export const decodeJwt = (token: string): any => {
   const decodedPayload = atob(payload);
   return JSON.parse(decodedPayload);
 };
+
 export const tokenValid = async() => {
   try {
     const token = localStorage.getItem("token");
@@ -33,6 +34,7 @@ export const tokenValid = async() => {
     }
   } 
 };
+
 export const formatDate = (dateString: string | null) => {
   if (!dateString) return "Brak daty";
   const date = new Date(dateString);

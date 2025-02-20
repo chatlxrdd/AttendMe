@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { tokenValid } from '@/utils/utilScripts.vue';
+import navBar from '@/components/Navbar.vue';
 
 onMounted(tokenValid);
 </script>
@@ -8,7 +9,7 @@ onMounted(tokenValid);
 <template>
   <header>
     <nav>
-      <h1>JEBAĆ ŻYDÓW</h1>
+      <navBar />
     </nav>
   </header>
   <router-view />

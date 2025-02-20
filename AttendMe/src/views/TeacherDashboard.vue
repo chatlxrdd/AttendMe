@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { formatDate, formatTime } from '@/utils/utilScripts.vue';
 import apiClient from "@/api/backend";
+import '@/assets/TeacherDashboard.css';
 
 interface CourseSession {
   courseId: number;
@@ -107,7 +108,7 @@ onMounted(fetchClasses);
 
       <div class="filter-group">
         <label for="search">Wyszukaj:</label>
-        <input id="search" type="text" v-model="filterSearch" placeholder="Zajęcia, Grupa, Lokalizacja" @keyup="changeFilter" />
+        <input id="search" type="text" v-model="filterSearch" placeholder="Zajęcia, Grupa, Lokalizacja" @input="changeFilter" />
       </div>
     </div>
 

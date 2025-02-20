@@ -2,7 +2,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { useRouter } from 'vue-router';
-import apiClient from "../api/backend";
+import apiClient from "@/api/backend";
+import '@/assets/StudentDashboard.css';
 
 interface CourseSession {
   courseSessionId: number;
@@ -109,7 +110,7 @@ onMounted(fetchStudentSessions);
 <template>
   <div class="dashboard">
     <h1>Pulpit Studenta</h1>
-    <div class="huj">
+    <div>
       <button @click="registerAttendance">Rejestruj obecność</button>
     </div>
 

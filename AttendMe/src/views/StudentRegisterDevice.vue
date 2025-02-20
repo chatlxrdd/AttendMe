@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import apiClient from "@/api/backend";
 import { useRoute } from "vue-router";
+import '@/assets/StudentRegisterDevice.css';
 
 const route = useRoute();
 const tokenRegister = ref(route.params.tokenRegister as string);
