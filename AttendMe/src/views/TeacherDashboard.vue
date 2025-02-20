@@ -125,7 +125,7 @@ onMounted(fetchClasses);
         </tr>
       </thead>
       <tbody>        
-        <tr v-for="cls in classes" @click="$router.push('/session/' + cls.courseSessionId)">
+        <tr v-for="cls in classes" @click="$router.push('/teacher/session/' + cls.courseSessionId)">
           <td><strong>{{ cls.courseName || "Brak danych" }}</strong></td>
           <td>{{ formatDate(cls.dateStart) }}</td>
           <td>{{ formatTime(cls.dateStart) }} - {{ formatTime(cls.dateEnd) }}</td>
