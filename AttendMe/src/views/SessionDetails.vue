@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { formatDate, formatTime } from '@/utils/FormatDate.vue';
 import apiClient from "@/api/backend";
 import Scanner from "@/components/Scanner.vue";
 
@@ -101,8 +102,8 @@ onMounted(async () => {
     <div v-if="!isLoading && sessionDetails" class="session-info">
       <h2>{{ sessionDetails.courseName }}</h2>
       <p><strong>Grupa:</strong> {{ sessionDetails.courseGroupName }}</p>
-      <p><strong>Data:</strong> {{ new Date(sessionDetails.dateStart).toLocaleDateString("pl-PL") }}</p>
-      <p><strong>Godzina:</strong> {{ new Date(sessionDetails.dateStart).toLocaleTimeString("pl-PL") }} - {{ new Date(sessionDetails.dateEnd).toLocaleTimeString("pl-PL") }}</p>
+      <p><strong>Data:</strong> {{ formatDate(sessionDetails.dateStart) }}</p>
+      <p><strong>Godzina:</strong> {{ formatTime(sessionDetails.dateStart) }} - {{ formatTime(sessionDetails.dateEnd) }}</p>
       <p><strong>Sala:</strong> {{ sessionDetails.locationName }}</p>
       <Scanner :courseSessionId="Number(sessionId)" />
     </div>
@@ -119,16 +120,16 @@ onMounted(async () => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="student in students" :key="student.attenderUserId">
-          <td>{{ student.studentAlbumIdNumber }}</td>
-          <td>{{ student.userName }}</td>
-          <td>{{ student.userSurname }}</td>
-          <td :class="{ present: student.wasUserPresent, absent: !student.wasUserPresent }">
-            {{ student.wasUserPresent ? "Obecny" : "Nieobecny" }}
+        <tr v-for="stu in students" :key="stu.attenderUserId">
+          <td>{{ stu.studentAlbumIdNumber }}</td>
+          <td>{{ stu.userName }}</td>
+          <td>{{ stu.userSurname }}</td>
+          <td :class="{ present: stu.wasUserPresent, absent: !stu.wasUserPresent }">
+            {{ stu.wasUserPresent ? "Obecny" : "Nieobecny" }}
           </td>
           <td>
-            <button @click="toggleAttendance(student)">
-              {{ student.wasUserPresent ? "Oznacz jako nieobecny" : "Oznacz jako obecny" }}
+            <button @click="toggleAttendance(stu)">
+              {{ stu.wasUserPresent ? "Oznacz jako nieobecny" : "Oznacz jako obecny" }}
             </button>
           </td>
         </tr>

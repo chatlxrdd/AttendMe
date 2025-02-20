@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { formatDate, formatTime } from '@/utils/FormatDate.vue';
 import apiClient from "@/api/backend";
-import ClassCard from "@/components/ClassCard.vue";
 
 interface CourseSession {
   courseId: number;
@@ -26,6 +26,7 @@ const classes = ref<CourseSession[]>([]);
 const isLoading = ref(true);
 const errorMessage = ref("");
 const filterType = ref("week");
+const filterSearch  = ref("");
 
 // Funkcja obliczania zakresów dat
 const getDateRanges = () => {
@@ -56,11 +57,12 @@ const fetchClasses = async () => {
     errorMessage.value = "";
 
     const dateRanges = getDateRanges();
-    const selectedFilter = dateRanges[filterType.value]; // Pobieramy odpowiedni zakres dat
+    const selectedFilter = dateRanges[filterType.value];
 
     const res = await apiClient.post<ApiResponse>("/course/teacher/sessions/get", {
       pageNumber: 1,
       filters: {
+        search: filterSearch.value,
         dateStart: selectedFilter.dateStart,
         dateEnd: selectedFilter.dateEnd,
       },
@@ -92,14 +94,22 @@ onMounted(fetchClasses);
   <div class="dashboard">
     <h1>Pulpit wykładowcy</h1>
 
-    <!--  Select do wyboru filtrowania zajęć -->
-    <label for="filter">Pokaż:</label>
-    <select id="filter" v-model="filterType" @change="changeFilter">
-      <option value="week">Ten Tydzień</option>
-      <option value="month">Ten Miesiąc</option>
-      <option value="future">Przyszłe</option>
-      <option value="all">Wszystkie</option>
-    </select>
+    <div class="filters">
+      <div class="filter-group">
+        <label for="filter">Pokaż:</label>
+        <select id="filter" v-model="filterType" @change="changeFilter">
+          <option value="week">Ten Tydzień</option>
+          <option value="month">Ten Miesiąc</option>
+          <option value="future">Przyszłe</option>
+          <option value="all">Wszystkie</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="search">Wyszukaj:</label>
+        <input id="search" type="text" v-model="filterSearch" placeholder="Zajęcia, Grupa, Lokalizacja" @keyup="changeFilter" />
+      </div>
+    </div>
 
     <p v-if="isLoading">Ładowanie zajęć...</p>
     <p v-if="errorMessage">{{ errorMessage }}</p>
@@ -110,21 +120,18 @@ onMounted(fetchClasses);
           <th>Zajęcia</th>
           <th>Data</th>
           <th>Godzina</th>
-          <th>Sala</th>
+          <th>Lokalizacja</th>
           <th>Grupa</th>
         </tr>
       </thead>
-      <tbody>
-        <ClassCard
-          v-for="cls in classes"
-          :key="cls.courseSessionId"
-          :courseSessionId="cls.courseSessionId"
-          :courseGroupName="cls.courseGroupName"
-          :courseName="cls.courseName"
-          :locationName="cls.locationName"
-          :dateStart="cls.dateStart"
-          :dateEnd="cls.dateEnd"
-        />
+      <tbody>        
+        <tr v-for="cls in classes" @click="$router.push('/session/' + cls.courseSessionId)">
+          <td><strong>{{ cls.courseName || "Brak danych" }}</strong></td>
+          <td>{{ formatDate(cls.dateStart) }}</td>
+          <td>{{ formatTime(cls.dateStart) }} - {{ formatTime(cls.dateEnd) }}</td>
+          <td>{{ cls.locationName || "Brak danych" }}</td>
+          <td>{{ cls.courseGroupName || "Brak danych" }}</td>
+        </tr>
       </tbody>
     </table>
 
@@ -154,30 +161,6 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* 🔹 Styl dla selektora */
-label {
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin-right: 10px;
-}
-
-select {
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #007BFF;
-  border-radius: 8px;
-  background: #1e1e1e;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s;
-  outline: none;
-}
-
-select:hover {
-  background: #007BFF;
-  color: white;
-}
-
 /* 🔹 Styl dla tabeli */
 table {
   width: 80%;
@@ -191,7 +174,7 @@ table {
 
 th, td {
   white-space: nowrap;
-  padding: 15px;
+  padding: 13px;
   text-align: center;
 }
 
@@ -212,15 +195,76 @@ tbody tr:hover {
   transition: background 0.3s ease-in-out;
 }
 
-/* 🔹 Dostosowanie dla responsywności */
+
+/* 🔹 Styl dla sekcji filtrów */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  background: #222; /* Ciemne tło */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 80%;
+  margin-bottom: 20px;
+}
+
+/* 🔹 Styl dla grupy filtra (label + input/select) */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* 🔹 Styl dla etykiet */
+.filters label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  margin-bottom: 5px;
+}
+
+/* 🔹 Styl dla pól wyboru i wyszukiwania */
+.filters select,
+.filters input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #007BFF;
+  border-radius: 8px;
+  background: #1e1e1e;
+  color: white;
+  transition: all 0.3s;
+  outline: none;
+  width: 220px;
+}
+
+/* 🔹 Efekty hover/focus dla pól */
+.filters select:hover,
+.filters input:hover {
+  background: #007BFF;
+}
+
+.filters select:focus,
+.filters input:focus {
+  border-color: #0056b3;
+  background: #007BFF;
+  color: white;
+}
+
+/* 🔹 Responsywność */
 @media (max-width: 768px) {
-  table {
+  .filters {
+    flex-direction: column;
+    align-items: center;
     width: 100%;
   }
 
-  select {
+  .filters select,
+  .filters input {
     width: 100%;
-    padding: 12px;
   }
 }
+
 </style>
