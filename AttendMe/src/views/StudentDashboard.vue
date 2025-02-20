@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 import apiClient from "../api/backend";
 
 interface CourseSession {
-  sessionId: number;
+  courseSessionId: number;
   courseName: string;
   dateStart: string;
   courseGroupName: string;
@@ -69,11 +69,12 @@ const fetchStudentSessions = async () => {
       pageSize: 20,
       filters: {
         search: searchText.value || "",
-        dateStart,
-        dateEnd
+        dateStart: dateStart,
+        dateEnd: dateEnd,
       },
       sortBy: "dateStart"
     });
+    console.log(response.data)
 
     if (response.data && Array.isArray(response.data.items)) {
       sessions.value = response.data.items.map(session => ({
@@ -94,8 +95,8 @@ const filteredSessions = computed(() =>
   sessions.value.filter(session => session.courseName.toLowerCase().includes(searchText.value.toLowerCase()))
 );
 
-const goToSessionDetails = (sessionId: number) => {
-  router.push(`/session/${sessionId}`);
+const goToSessionDetails = (courseSessionId: number) => {
+  router.push(`/student/session/${courseSessionId}`);
 };
 
 onMounted(fetchStudentSessions);
@@ -119,7 +120,7 @@ onMounted(fetchStudentSessions);
     <p v-if="errorMessage">{{ errorMessage }}</p>
 
     <ul v-if="!isLoading && filteredSessions.length">
-      <li v-for="session in filteredSessions" :key="session.sessionId" @click="goToSessionDetails(session.sessionId)" class="clickable">
+      <li v-for="session in filteredSessions" :key="session.courseSessionId" @click="goToSessionDetails(session.courseSessionId)" class="clickable">
         <strong>{{ session.courseName }}</strong> - 
         {{ session.dateStart }} - 
         Grupa: {{ session.courseGroupName }}

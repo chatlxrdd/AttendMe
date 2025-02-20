@@ -95,7 +95,6 @@ onMounted(fetchSessionDetails);
       <p>Lokalizacja: {{ sessionDetail.locationName }}</p>
       
       <button @click="registerAttendance">Rejestruj obecność</button>
-      <button @click="fetchSessionDetails">Odśwież</button>
       <button @click="goBack">Powrót</button>
     </div>
   </div>

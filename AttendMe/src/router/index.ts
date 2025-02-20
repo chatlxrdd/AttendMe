@@ -1,9 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "@/views/Login.vue";
 import TeacherDashboard from "@/views/TeacherDashboard.vue";
-import SessionDetails from "@/views/SessionDetails.vue";
-import StudentDashboard from "@/views/StudentDashboard.vue"
+// import TeacherSessionDetails from "@/views/TeacherSessionDetails.vue";
 import Scanner from "@/views/Scanner.vue";
+// import RegisterDevice from "@/views/StudentRegisterDevice.vue"
+import StudentSessionDetails from "@/views/StudentSessionDetails.vue";
+import StudentDashboard from "@/views/StudentDashboard.vue";  
+
 
 const routes = [
   {
@@ -16,20 +19,30 @@ const routes = [
     name: "TeacherDashboard",
     component: TeacherDashboard,
   },
+  // {
+  //   path: "/teacher/session/:sessionId",
+  //   name: "TeacherSessionDetails",
+  //   component: TeacherSessionDetails,
+  // },
   {
-    path: "/session/:sessionId",
-    name: "SessionDetails",
-    component: SessionDetails,
-  },
-  {
-    path: "/student",
-    name: "StudentDashboard",
-    component: StudentDashboard,
+    path: "/student/session/:sessionId",
+    name: "StudentSessionDetails",
+    component: StudentSessionDetails,
   },
   {
     path: "/scanner/:tokenScanner",
     name: "Scanner",
     component: Scanner,
+  },
+  // {
+  //   path: "/register/device/:tokenRegister",
+  //   name: "Zarejestruj urządzenie",
+  //   component: RegisterDevice,
+  // },
+  {
+    path: "/student",
+    name: "Jebąc",
+    component: StudentDashboard
   }
 ];
 
