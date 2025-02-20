@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import TeacherScanner from "@/views/TeacherScanner.vue";
 import StudentDeviceRegister from "@/views/StudentDeviceRegister.vue";
+import QRCodeScanner from "@/views/QRCodeScanner.vue";
 import Home from "@/views/Home.vue";
 
 const routes = [
@@ -18,6 +19,11 @@ const routes = [
     path: "/StudentDeviceRegister",
     name: "StudentDeviceRegister",
     component: StudentDeviceRegister,
+  },
+  {
+    path: "/QRCodeScanner",
+    name: "QRCodeScanner",
+    component: QRCodeScanner,
   },
 ];
 

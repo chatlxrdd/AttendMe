@@ -69,34 +69,38 @@ const registerDevice = async () => {
 <template>
     <div class="container">
 
+        <div class="form-box">
+            <!-- Logo -->
+            <img src="@/assets/logo.png" alt="AttendMe Logo" class="logo" />
+            <h1 class="title">Rejestracja urządzenia</h1>
+            <p class="subtitle">
+                Rejestrujesz urządzenie, którego będziesz używać do sprawdzania obecności. Uzupełnij poniższe dane
+                i naciśnij przycisk "Zarejestruj".
+            </p>
 
-        <h1 class="title">Rejestracja urządzenia</h1>
-        <p class="subtitle">
-            Rejestrujesz urządzenie, którego będziesz używać do sprawdzania obecności. Uzupełnij poniższe dane
-            i naciśnij przycisk "Rejestruj".
-        </p>
+            <form @submit.prevent="registerDevice" class="form">
+                <label class="input-label">Nazwa urządzenia</label>
+                <input v-model="deviceName" type="text" placeholder="Wprowadź nazwę urządzenia" class="input-field"
+                    required />
 
-        <form @submit.prevent="registerDevice" class="form">
-            <label class="input-label">Nazwa urządzenia</label>
-            <input v-model="deviceName" type="text" placeholder="Wprowadź nazwę urządzenia" class="input-field"
-                required />
+                <label class="input-label">Twoje imię</label>
+                <input v-model="studentName" type="text" placeholder="Wprowadź swoje imię" class="input-field"
+                    required />
 
-            <label class="input-label">Twoje imię</label>
-            <input v-model="studentName" type="text" placeholder="Wprowadź swoje imię" class="input-field" required />
+                <label class="input-label">Twoje nazwisko</label>
+                <input v-model="studentSurname" type="text" placeholder="Wprowadź swoje nazwisko" class="input-field"
+                    required />
 
-            <label class="input-label">Twoje nazwisko</label>
-            <input v-model="studentSurname" type="text" placeholder="Wprowadź swoje nazwisko" class="input-field"
-                required />
+                <label class="input-label">Twój numer albumu</label>
+                <input v-model="albumNumber" type="number" placeholder="Wprowadź numer albumu" class="input-field"
+                    required />
 
-            <label class="input-label">Twój numer albumu</label>
-            <input v-model="albumNumber" type="number" placeholder="Wprowadź numer albumu" class="input-field"
-                required />
+                <button type="submit" class="submit-btn">Zarejestruj</button>
+            </form>
 
-            <button type="submit" class="submit-btn">Zarejestruj</button>
-        </form>
-
-        <div v-if="message" :class="['message', messageType === 'success' ? 'success' : 'error']">
-            {{ message }}
+            <div v-if="message" :class="['message', messageType === 'success' ? 'success' : 'error']">
+                {{ message }}
+            </div>
         </div>
     </div>
 </template>
