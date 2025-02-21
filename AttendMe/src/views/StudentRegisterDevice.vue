@@ -9,8 +9,6 @@ const route = useRoute();
 const router = useRouter();
 const tokenRegister = ref(route.params.tokenRegister as string);
 
-console.log(tokenRegister.value)
-
 // 🔹 Zmienne formularza
 const deviceName = ref("");
 const studentName = ref("");

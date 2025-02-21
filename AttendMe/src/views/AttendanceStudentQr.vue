@@ -5,17 +5,25 @@ import QrcodeVue from "qrcode.vue";
 import router from "@/router";
 
 const checkDevice = ref<boolean>(false);
-const authTokenDevice = ref<string>("");
+const authTokenDevice = localStorage.getItem("authDevice");
+const attendandeToken = ref<string>("");
 const tokenregister = async () => {
-    const response = await apiClient.get(
+    try {
+        const response = await apiClient.get(
         "/user/attendance/ticket/get", { 
         headers: {
-            Authorization: `Bearer ${localStorage.getItem("authDevice")}`
+            Authorization: `Bearer ${authTokenDevice}`
         }
-    }
-)
-    authTokenDevice.value = response.data.token
+    })
+    attendandeToken.value = response.data.token
     checkDevice.value = true
+      } catch (error) {
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          console.log("❌ Token wygasł lub jest niepoprawny. Zarejestruj urządzenie ponownie");
+          localStorage.removeItem('authDevice');
+        }
+      }
+    
 }
 const goBack = () => {
     router.back();
