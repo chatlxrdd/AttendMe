@@ -40,7 +40,7 @@ watch(isAuthenticated, (newValue) => {
     </div>
   </nav>
 </template>
-  
+ 
   <style scoped>
   .navbar {
     position: fixed;
