@@ -138,9 +138,10 @@ onMounted(async () => {
         </tr>
       </tbody>
     </table>
+    <p v-else>Brak studentów na liście.</p>
     
     <p v-if="errorMessage">{{ errorMessage }}</p>
 
-    <p v-else>Brak studentów na liście.</p>
+
   </div>
 </template>
