@@ -24,19 +24,24 @@ export const useAuthStore = defineStore('auth', {
       this.role = null;
       localStorage.removeItem('user');
       localStorage.removeItem('token');
-      router.push('/');
+      const origin = "/";
+      if (window.location.pathname === origin) { return }
+      window.location.href = origin;
     },
     async checkAuth() {
       const user = JSON.parse(localStorage.getItem('user'));
       const token = localStorage.getItem("token");
 
-      if ((user && !token) || (!user && token)) {
+      if ( user && token ) {
+        this.isAuthenticated = user.isAuthenticated ? true : false;
+        this.role = user.role;
+      } else if ( user || token ) {
         console.log("Brak roli/tokena, zaloguj się.");
         this.logout();
         return;
-      } else if (user) {
-        this.isAuthenticated = user.isAuthenticated ? true : false;
-        this.role = user.role;
+      } else { 
+        this.logout();
+        return;
       }
       
       try {

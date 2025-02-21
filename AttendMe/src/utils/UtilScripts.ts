@@ -1,7 +1,17 @@
-export const decodeJwt = (token: string): any => {
-  const payload = token.split(".")[1];
-  const decodedPayload = atob(payload);
-  return JSON.parse(decodedPayload);
+export const decodeJwt = (token: string | null | undefined): any => {
+  if (!token) return null;
+
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+
+    const payload = parts[1];
+    const decodedPayload = atob(payload);
+    return JSON.parse(decodedPayload);
+  } catch (error) {
+    console.error("Błąd dekodowania JWT:", error);
+    return null;
+  }
 };
 
 export const formatDate = (dateString: string | null) => {
