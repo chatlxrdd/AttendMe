@@ -1,5 +1,5 @@
 import axios from "axios";
-import { tokenValid } from '@/utils/utilScripts.vue';
+import { tokenValid } from '@/utils/UtilScripts.vue';
 
 const API_BASE_URL = "https://attendme-backend.runasp.net";
 

@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import apiClient, { AuthResponse } from '@/api/backend';
 import router from '@/router';
-import { decodeJwt } from '@/utils/utilScripts.vue';
+import { decodeJwt } from '@/utils/UtilScripts.vue';
 import '@/assets/login.css';
 
 const username = ref<string>("");

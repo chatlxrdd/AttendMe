@@ -1,27 +1,27 @@
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const token = ref<string | null>(null);
+
+const logout = () => {
+  localStorage.removeItem("token");
+  router.push("/"); 
+};
+
+onMounted(() => {
+  token.value = localStorage.getItem("token");
+});
+</script>
+
 <template>
-    <nav v-if="token" class="navbar">
-      <div class="user-info">
-        <button @click="logout" class="logout-btn">Wyloguj</button>
-      </div>
-    </nav>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref, onMounted } from "vue";
-  import { useRouter } from "vue-router";
-  
-  const router = useRouter();
-  const token = ref<string | null>(null);
-  
-  const logout = () => {
-    localStorage.removeItem("token");
-    router.push("/"); 
-  };
-  
-  onMounted(() => {
-    token.value = localStorage.getItem("token");
-  });
-  </script>
+  <nav v-if="token" class="navbar">
+    <div class="user-info">
+      <button @click="logout" class="logout-btn">Wyloguj</button>
+    </div>
+  </nav>
+</template>
   
   <style scoped>
   .navbar {

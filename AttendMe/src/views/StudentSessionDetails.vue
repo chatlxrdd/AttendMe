@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { formatDate, formatTime } from '@/utils/utilScripts.vue';
+import { formatDate, formatTime } from '@/utils/UtilScripts.vue';
 import apiClient from "../api/backend";
 import { useRoute, useRouter } from 'vue-router';
 import '@/assets/StudentSessionDetails.css';

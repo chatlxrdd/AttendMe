@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { formatDate, formatTime } from '@/utils/utilScripts.vue';
+import { formatDate, formatTime } from '@/utils/UtilScripts.vue';
 import apiClient from "@/api/backend";
 import Scanner from "@/components/ScanerQr.vue";
 import DevicesStudents from "@/components/DevicesStudents.vue";
-import "@/assets/scannerQr.css";
 import '@/assets/StudentSessionDetails.css';
 
 interface SessionDetails {

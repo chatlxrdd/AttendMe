@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps, onMounted } from "vue";
+import { ref } from "vue";
 import apiClient from "@/api/backend";
 
 interface Student {

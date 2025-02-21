@@ -1,10 +1,9 @@
 <script setup lang="ts">
-
 import { useRoute } from "vue-router";
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted } from "vue";
 import QrScanner from "qr-scanner";
 import apiClient from "@/api/backend";
-//import "@/assets/scanner.css"; // 🔹 Import pliku ze stylami
+import "@/assets/scanner.css"; // 🔹 Import pliku ze stylami
 
 const route = useRoute();
 const tokenScanner = ref(route.params.tokenScanner as string);
