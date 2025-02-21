@@ -1,24 +1,42 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useAuthStore } from '@/stores/authStore';
+import { ref, onMounted, watch, computed } from "vue";
+import { decodeJwt } from '@/utils/UtilScripts';
+import apiClient from '@/api/backend';
 
-const router = useRouter();
+const authStore = useAuthStore();
 const token = ref<string | null>(null);
+const name = ref<string | null>(null);
+const isAuthenticated = computed(() => authStore.isAuthenticated)
+const isLoading = ref<boolean>(false);
 
-const logout = () => {
-  localStorage.removeItem("token");
-  router.push("/"); 
-};
-
-onMounted(() => {
+const loadName = async () => {
   token.value = localStorage.getItem("token");
-});
+  if (!token.value) { return }
+  isLoading.value = true;
+  const userId = decodeJwt(token.value).sub;
+  const res = await apiClient.get(`/user/get?userId=${userId}`);
+  name.value = res.data.name;
+  isLoading.value = false;
+}
+
+onMounted(loadName);
+watch(isAuthenticated, (newValue) => {
+  if (newValue) {
+    loadName()
+  } else {
+    name.value = null
+  }
+})
 </script>
 
 <template>
-  <nav v-if="token" class="navbar">
+  <nav class="navbar" v-if="!isLoading">
+    <p v-if="authStore.isAuthenticated">Witaj {{ name }}</p>
+    <router-link v-if="authStore.isAuthenticated && authStore.role === 'student'" to="/student">Strona główna</router-link>
+    <router-link v-if="authStore.isAuthenticated && authStore.role === 'teacher'" to="/teacher">Strona główna</router-link>
     <div class="user-info">
-      <button @click="logout" class="logout-btn">Wyloguj</button>
+      <button v-if="authStore.isAuthenticated" class="logout-btn" @click="authStore.logout();">Wyloguj</button>
     </div>
   </nav>
 </template>

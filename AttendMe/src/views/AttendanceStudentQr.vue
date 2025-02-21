@@ -4,6 +4,7 @@ import apiClient from "@/api/backend";
 import QrcodeVue from "qrcode.vue";
 import router from "@/router";
 
+const checkDevice = ref<boolean>(false);
 const authTokenDevice = ref<string>("");
 const tokenregister = async () => {
     const response = await apiClient.get(
@@ -14,14 +15,13 @@ const tokenregister = async () => {
     }
 )
     authTokenDevice.value = response.data.token
-    console.log(response.data.token)
+    checkDevice.value = true
 }
 const goBack = () => {
-  router.push("/student");
+    router.back();
 };
 
 onMounted(tokenregister)
-console.log(authTokenDevice.value)
 </script>
 <template>
     <div class="scanner-container">
@@ -31,12 +31,11 @@ console.log(authTokenDevice.value)
                     <h2>Skaner obecności</h2>
                 </div>
                 <div class="modal-body">
-                    <div class="qr-container">
+                    <div class="qr-container" v-if="checkDevice">
                         <qrcode-vue :value="authTokenDevice" :size="250" level="M"></qrcode-vue>
-                       
-
                     </div>
-                    <button @click="goBack">KURWYYYYYYYYYYYYYYYYYYYYYYYYY!!!!!!!!!!!!!!!!</button>
+                    <p v-if="!checkDevice">Najpierw zarejestruj urządzenie</p>
+                    <button @click="goBack">Powrót</button>
                 </div>
             </div>
         </div>

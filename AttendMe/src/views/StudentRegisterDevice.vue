@@ -2,9 +2,11 @@
 import { ref } from "vue";
 import apiClient from "@/api/backend";
 import { useRoute } from "vue-router";
+import { useRouter } from 'vue-router'
 import '@/assets/StudentRegisterDevice.css';
 
 const route = useRoute();
+const router = useRouter();
 const tokenRegister = ref(route.params.tokenRegister as string);
 
 console.log(tokenRegister.value)
@@ -16,10 +18,6 @@ const studentSurname = ref("");
 const albumNumber = ref("");
 const message = ref("");
 const messageType = ref("success");
-
-
-// Pobranie tokenu i sprawdzenie czy jest użytkownikiem
-
 
 // 🔹 Funkcja rejestracji urządzenia
 const registerDevice = async () => {
@@ -41,13 +39,11 @@ const registerDevice = async () => {
             }
         );
         localStorage.setItem("authDevice", response.data.token);
-        return response.data;
+        router.push("/");
 
 
     } catch (error: any) {
         console.error("❌ Błąd rejestracji:", error.response?.data || error.message);
-    } finally {
-        console.log('Chuj')
     }
 };
 </script>

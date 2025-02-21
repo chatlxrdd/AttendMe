@@ -3,6 +3,7 @@
 import { ref, onMounted, computed } from "vue";
 import { useRouter } from 'vue-router';
 import apiClient from "@/api/backend";
+import AttendanceQrButton from "@/components/AttendanceQrButton.vue";
 import '@/assets/StudentDashboard.css';
 
 interface CourseSession {
@@ -76,7 +77,6 @@ const fetchStudentSessions = async () => {
       },
       sortBy: "dateStart"
     });
-    console.log(response.data)
 
     if (response.data && Array.isArray(response.data.items)) {
       sessions.value = response.data.items.map(session => ({
@@ -100,9 +100,6 @@ const filteredSessions = computed(() =>
 const goToSessionDetails = (courseSessionId: number) => {
   router.push(`/student/session/${courseSessionId}`);
 };
-const registerAttendance = async () => {
-  router.push(`/student/qr`);
-};
 
 onMounted(fetchStudentSessions);
 </script>
@@ -110,9 +107,7 @@ onMounted(fetchStudentSessions);
 <template>
   <div class="dashboard">
     <h1>Pulpit Studenta</h1>
-    <div>
-      <button @click="registerAttendance">Rejestruj obecność</button>
-    </div>
+      <AttendanceQrButton />
 
     <div class="filters">
       <input v-model="searchText" type="text" placeholder="Szukaj zajęć..." @input="fetchStudentSessions" />

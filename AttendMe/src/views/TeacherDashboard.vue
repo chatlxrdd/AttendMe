@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { formatDate, formatTime } from '@/utils/UtilScripts.vue';
+import { formatDate, formatTime } from '@/utils/UtilScripts';
 import apiClient from "@/api/backend";
 import '@/assets/TeacherDashboard.css';
 

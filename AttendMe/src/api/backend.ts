@@ -1,5 +1,5 @@
 import axios from "axios";
-import { tokenValid } from '@/utils/UtilScripts.vue';
+import { useAuthStore } from '@/stores/authStore';
 
 const API_BASE_URL = "https://attendme-backend.runasp.net";
 
@@ -17,7 +17,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use((config) => {
   // Jeśli nie przekażemy tokena to użyje z localStorage
   if (!config.headers.Authorization) {
-    tokenValid();
+    useAuthStore().checkAuth();
     const token = localStorage.getItem("token");
     config.headers.Authorization = `Bearer ${token}`;
   }

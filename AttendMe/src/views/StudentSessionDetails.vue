@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { formatDate, formatTime } from '@/utils/UtilScripts.vue';
+import { formatDate, formatTime } from '@/utils/UtilScripts';
 import apiClient from "../api/backend";
 import { useRoute, useRouter } from 'vue-router';
 import '@/assets/StudentSessionDetails.css';
+import AttendanceQrButton from "@/components/AttendanceQrButton.vue";
 
 interface CourseSessionListItem {
   courseId: number;
@@ -84,6 +85,7 @@ onMounted(fetchSessionDetails);
       <p>Grupa: {{ sessionDetail.courseGroupName }}</p>
       <p>Termin: {{ formatDate(sessionDetail.dateStart) }} {{ formatTime(sessionDetail.dateStart) }} - {{ formatTime(sessionDetail.dateEnd) }}</p>
       <p>Lokalizacja: {{ sessionDetail.locationName }}</p>
+      <AttendanceQrButton />
       <button @click="goBack">Powrót</button>
     </div>
   </div>

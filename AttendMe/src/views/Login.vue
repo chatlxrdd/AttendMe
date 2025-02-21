@@ -1,21 +1,28 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { useAuthStore } from '@/stores/authStore';
+import { useRouter } from 'vue-router'
+import { ref } from 'vue';
+import { decodeJwt } from '@/utils/UtilScripts';
 import apiClient, { AuthResponse } from '@/api/backend';
-import router from '@/router';
-import { decodeJwt } from '@/utils/UtilScripts.vue';
+import AttendanceQrButton from "@/components/AttendanceQrButton.vue";
 import '@/assets/login.css';
 
+const authStore = useAuthStore();
+const router = useRouter();
 const username = ref<string>("");
 const password = ref<string>("");
 const error = ref<string>("");
 
-const redirectToDashboard = (token: string) => {
+const login = () => {
+  const token = localStorage.getItem("token");
   const decodedToken = decodeJwt(token);
   const role = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
   if (role === "teacher") {
+    authStore.login('teacher');
     router.push("/teacher");
   } else if (role === "student") {
+    authStore.login('student');
     router.push("/student");
   } else {
     console.error("❌ Nieznana rola:", role);
@@ -38,7 +45,7 @@ const handleLogin = async () => {
 
     if (response.data?.token) {
       localStorage.setItem("token", response.data.token);
-      location.reload();
+      login();
     } else {
       throw new Error("Brak tokena w odpowiedzi.");
     }
@@ -47,13 +54,6 @@ const handleLogin = async () => {
     alert("Niepoprawne dane logowania. Spróbuj ponownie.");
   }
 };
-
-onMounted(() => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    redirectToDashboard(token);
-  }
-});
 </script>
 
 <template>
@@ -87,6 +87,7 @@ onMounted(() => {
       </div>
       <button type="submit" >Zaloguj</button>
     </form>
+    <AttendanceQrButton />
   </div>
 </template>
 
