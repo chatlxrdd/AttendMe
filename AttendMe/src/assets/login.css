@@ -24,11 +24,6 @@ html, body {
   transform: translate(-50%, -50%) !important;
 }
 
-.title, h1 {
-  color: #007bff !important;
-  font-weight: bold !important;
-  margin-bottom: 10px !important;
-}
 
 .subtitle {
   color: #555 !important;
@@ -80,14 +75,18 @@ tr:hover {
 button {
   background: #007bff !important;
   color: white !important;
-  padding: 10px !important;
+  padding: 15px 20px !important; /* Zwiększone wypełnienie */
   border: none !important;
-  border-radius: 50px !important;
+  border-radius: 152px !important; /* Mniejszy border-radius dla lepszego wyglądu */
+  font-size: 1.1em !important; /* Większy tekst */
   font-weight: bold !important;
   transition: 0.3s !important;
   cursor: pointer !important;
   margin-top: 10px !important;
+  width: 100% !important; /* Pełna szerokość */
+  max-width: 300px !important; /* Ale nie za szeroki */
 }
+
 
 button:hover {
   background: #0056b3 !important;
